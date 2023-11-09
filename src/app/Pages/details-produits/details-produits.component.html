@@ -1,0 +1,173 @@
+<!-- <div class="dashboard w-100 h-10-mt-1  border-0">
+  <ul class="d-flex justify-content-between px-5 _mat-animation-noopable pt-3 list-unstyled">
+    <strong> <li >Dashboard</li> </strong>
+    <li><i class="fa-solid fa-chart-simple fa-beat-fade fa-2x" style="color: #3575e3;"></i></li>
+  </ul>
+</div>-->
+
+<div class="container ">
+  <div style="display: flex; align-items: center; justify-content: end;">
+    <h4 style="margin-top: 15px; padding: 2px;">All :</h4>
+
+    <ng-container >
+      <ng-container *ngIf="!product.isEditing; else editField">
+        <button mat-raised-button class="transparent-button" style="border: 1px solid #1976d2; margin-right: 5px; border-radius: 5px;" (click)="enableEditModeForAll()"><mat-icon class="blue-icon">edit</mat-icon></button>
+      </ng-container>
+
+      <ng-template #editField>
+          <button mat-raised-button class="transparent-button" style="border: 1px solid #2aa053; margin-right: 5px; border-radius: 5px;" (click)="saveAllProducts()"><mat-icon style="color: #2aa053;    margin-top: 1px;">save</mat-icon></button>
+          <button mat-raised-button class="transparent-button"  style="border: 1px solid #585958; margin-right: 5px; border-radius: 5px;" (click)="cancelAllEdits()"><mat-icon style="color: #585958;    margin-top: 1px;">cancel</mat-icon></button>
+      </ng-template>
+  </ng-container>
+  </div>
+
+
+  <p class="font-weight-bold --warning-color "><i class="fa-solid fa-fish-fins"></i>Tableau details des produits</p>
+  <div style="display: flex; align-items: center; justify-content: start;">
+    <h4 style="margin-top: 15px; padding: 2px;">Filtrer par Catégorie:</h4>
+    <button mat-raised-button class="transparent-button" (click)="filterByCategory('all')" [class.active]="selectedCategory === 'all'">All</button>
+    <button mat-raised-button class="transparent-button" (click)="filterByCategory(0)" [class.active]="selectedCategory === 0">Poisson</button>
+    <button mat-raised-button class="transparent-button" (click)="filterByCategory(1)" [class.active]="selectedCategory === 1">Fruits de Mer</button>
+    <button mat-raised-button class="transparent-button" (click)="filterByCategory(2)" [class.active]="selectedCategory === 2">Crustacés</button>
+  </div>
+
+  <table mat-table [dataSource]="productsList" class="mat-elevation-z8 demo-table shadow-light">
+
+
+    <!-- border: 1px solid #bf1717; -->
+    <ng-container matColumnDef="name">
+      <th class="vertical-line --primary-blue-title" mat-header-cell *matHeaderCellDef>Name</th>
+      <td class="vertical-line" mat-cell *matCellDef="let product" [style.border]="!product.name ? '1px solid #bf1717' : ''" [attr.title]="!product.name ? 'Errrrreuur' : null">
+        <ng-container>
+          {{ product.name }}
+        </ng-container>
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th class="vertical-line text-center --primary-blue-title" mat-header-cell *matHeaderCellDef>Price</th>
+      <td class="vertical-line text-center" mat-cell *matCellDef="let product" [style.border]="product.price < 0 ? '1px solid #bf1717' : ''" [attr.title]="product.price < 0 ? 'Errrrreuur' : null">
+        <ng-container *ngIf="!product.isEditing; else editField">
+          {{ product.price }}
+        </ng-container>
+        <ng-template #editField>
+          <form (submit)="saveProduct(product); toggleEditMode(product)">
+            <input type="number" class="width-input-max" [(ngModel)]="product.price" name="price" required>
+          </form>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sale">
+      <th class="vertical-line text-center --primary-blue-title" mat-header-cell *matHeaderCellDef>sale</th>
+      <td class="vertical-line text-center" mat-cell *matCellDef="let product">
+        <ng-container>
+          {{ product.sale }}
+        </ng-container>
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="discount">
+      <th class="vertical-line text-center --primary-blue-title" mat-header-cell *matHeaderCellDef>discount</th>
+      <td class="vertical-line text-center" mat-cell *matCellDef="let product" [style.border]="(product.discount < 0 || product.discount > 100) ? '1px solid #bf1717' : ''" [attr.title]="(product.discount < 0 || product.discount > 100) ? 'Errrrreuur' : null">
+          <ng-container *ngIf="!product.isEditing; else editField">
+    {{product.discount}}%
+        </ng-container>
+        <ng-template #editField>
+          <form (submit)="saveProduct(product); toggleEditMode(product)" style="display: flex;">
+            <input type="number" class="width-input-max" [(ngModel)]="product.discount" name="discount" required>
+            <span *ngIf="product.isEditing">%</span>
+          </form>
+        </ng-template>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="price_on_sale">
+      <th  class="vertical-line text-center --primary-blue-title" mat-header-cell  *matHeaderCellDef>price_on_sale</th>
+      <td  class="vertical-line text-center" mat-cell *matCellDef="let product" >
+          <ng-container >
+         {{calculatePercentageDiscount(product)}}
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quantityInStock">
+      <th class="vertical-line text-center --primary-blue-title" mat-header-cell *matHeaderCellDef>quantityInStock</th>
+      <td class="vertical-line text-center" mat-cell *matCellDef="let product">
+        <ng-container *ngIf="!product.isEditing; else editField">
+          {{ product.quantityInStock }}
+
+        </ng-container>
+        <ng-template #editField>
+          <form (submit)="saveProduct(product); toggleEditMode(product)">
+            <input type="number" class="width-input-max" [(ngModel)]="product.quantityInStock" [value]="quantityInStock" name="quantityInStock" required>
+          </form>
+        </ng-template>
+      </td>
+    </ng-container>
+>
+  <ng-container matColumnDef="quantity_sold">
+    <th class="vertical-line text-center --primary-blue-title" mat-header-cell *matHeaderCellDef>quantity_sold</th>
+    <td class="vertical-line text-center" mat-cell *matCellDef="let product">
+      <ng-container *ngIf="!product.isEditing; else editField">
+        {{ product.quantity_sold }}
+
+      </ng-container>
+      <ng-template #editField>
+        <form (submit)="saveProduct(product); toggleEditMode(product)">
+          <input type="number" class="width-input-max" [(ngModel)]="product.quantity_sold" name="quantity_sold" required>
+        </form>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="comments">
+    <th class="vertical-line text-center --primary-blue-title" mat-header-cell *matHeaderCellDef>comments</th>
+    <td class="vertical-line" mat-cell *matCellDef="let product">
+      <ng-container >
+        {{ product.comments }}
+      </ng-container>
+    </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="edit">
+    <th class="vertical-line text-center --primary-blue-title font-weight-bold" mat-header-cell *matHeaderCellDef>#</th>
+    <td class="vertical-line text-center" mat-cell *matCellDef="let product">
+      <ng-container *ngIf="product.isEditing; else editField">
+        <!-- Bouton "Save" -->
+        <form (submit)="saveProduct(product); toggleEditMode(product)">
+            <div style="display: flex;">
+              <button class="transparent-button" type="submit"><mat-icon style="color: #2aa053;">save</mat-icon></button>
+              <button class="transparent-button"  type="button" (click)="toggleEditMode(product)"><mat-icon style="color: #585958;">cancel</mat-icon></button>
+          </div>
+          </form>
+      </ng-container>
+      <ng-template #editField>
+        <!-- Bouton "Edit" -->
+        <button mat-button class="transparent-button" aria-label="Example icon button with a home icon" (click)="toggleEditMode(product)">
+          <mat-icon class="blue-icon">edit</mat-icon>
+        </button>
+
+
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="[ 'name', 'price','sale', 'discount','price_on_sale',  'quantityInStock', 'quantity_sold', 'comments' ,'edit',]"></tr>
+  <tr mat-row *matRowDef="let row; columns: [ 'name', 'price','sale', 'discount', 'price_on_sale', 'quantityInStock', 'quantity_sold', 'comments' ,'edit',]"></tr>
+  </table>
+<br/>
+
+<div class="d-flex justify-content-between ">
+  <div class="col-6 p-3 shadow-light">
+    <app-statistique-graph></app-statistique-graph>
+  </div>
+
+  <div class="col-5 p-3 shadow-light">
+    <app-pie-chart></app-pie-chart>
+  </div>
+</div>
+
+</div>

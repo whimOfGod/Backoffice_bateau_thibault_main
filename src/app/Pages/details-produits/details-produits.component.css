@@ -1,0 +1,82 @@
+
+.demo-table {
+  width: 80%;
+}
+
+.h-10-mt-1 {
+  height: 10vh;
+  margin-top: 2vh;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: #e6e6e6;
+  background-color: #c8d2f36d;
+}
+
+.demo-row-is-clicked {
+  font-weight: bold;
+}
+
+.mat-elevation-z8, .mat-mdc-elevation-specific.mat-elevation-z8 {
+  box-shadow:none;
+}
+
+.vertical-line {
+  border-right: 1px solid #e6e6e6; /* Couleur et épaisseur de la bordure */
+  padding-right: 10px; /* Espace entre la bordure et le contenu de la cellule */
+}
+
+
+.dashboard {
+  box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.05);
+  -webkit-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.05);
+  -moz-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.05);
+}
+
+.shadow-light {
+  box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow:0px 0px 15px 0px rgba(0,0,0,0.1);
+}
+
+.transparent-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+}
+
+.transparent-button:hover {
+  transition: border 0.3s;
+  border-radius: 5px;
+  /* border: 1px solid black; */
+  box-shadow: 1px  1px 2px rgba(0, 0, 0, 0.2);
+}
+.transparent-button.active {
+  transition: border 0.3s;
+  border-radius: 5px;
+  box-shadow: 1px  1px 2px rgba(0, 0, 0, 0.2);
+}
+.blue-icon {
+  color: #1976d2;
+  cursor: pointer;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.width-input-max
+{
+  width: 100%;
+}
+.no-value-cell {
+  background-color: aqua;
+}
