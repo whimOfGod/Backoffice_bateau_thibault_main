@@ -25,3 +25,18 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+Voici quelques commandes utiles au bon fonctionnement du backend s'il y a des erreurs:
+
+Pour régler les problèmes liés à l'installation de djangorestframework-simplejwt :
+
+- pip install djangorestframework-simplejwt
+- pip install djangorestframework
+Pour régler les problèmes liés à la dépendance de setuptools wheel :
+
+- python -m pip install setuptools wheel
+Autres commandes :
+
+- pip install django-cors-headers
+- pip install --upgrade --force-reinstall setuptools
+- pip install djangorestframework
